@@ -1,0 +1,377 @@
+####How to Change M Code in Power BI
+
+let
+    Source = Sql.Databases("localhost"),
+    AdventureWorks2012 = Source{[Name="AdventureWorks2012"]}[Data],
+    HumanResources_Employee = AdventureWorks2012{[Schema="HumanResources",Item="Employee"]}[Data]
+in
+    HumanResources_Employee
+	
+
+#LoginID Split By "/"
+
+let
+    Source = Sql.Databases("localhost"),
+    AdventureWorks2012 = Source{[Name="AdventureWorks2012"]}[Data],
+    HumanResources_Employee = AdventureWorks2012{[Schema="HumanResources",Item="Employee"]}[Data],
+    #"Split Column by Delimiter" = Table.SplitColumn(HumanResources_Employee, "LoginID", Splitter.SplitTextByDelimiter("\", QuoteStyle.Csv), {"LoginID.1", "LoginID.2"}),
+    #"Changed Type" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"LoginID.1", type text}, {"LoginID.2", type text}})
+in
+    #"Changed Type"
+	
+	
+let
+    Source = Excel.CurrentWorkbook(){[Name="MyTable"]}[Content],
+    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Row", Int64.Type}}),
+    #"Invoked Custom Function" = Table.AddColumn(#"Changed Type", "fnCallWebServiceWithHeaders", 
+    each fnCallWebServiceWithHeadersExlCache([Row]))
+in
+    #"Invoked Custom Function"
+https://blogs.sas.com/content/sasdummy/2012/05/18/using-proc-sql-to-get-the-schema-of-a-mysql-database/
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    DISTINCT('financials'[Segment])
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(501, __DS0Core, 'financials'[Segment], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  'financials'[Segment]
+  
+  
+  // DAX Query
+DEFINE
+  VAR __DS0Core = SUMMARIZECOLUMNS(ROLLUPADDISSUBTOTAL('financials'[Segment], "IsGrandTotalRowTotal"),"SumGross_Sales", CALCULATE(SUM('financials'[Gross Sales])))
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(502, __DS0Core, [IsGrandTotalRowTotal], 0, 'financials'[Segment], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [IsGrandTotalRowTotal] DESC, 'financials'[Segment]
+
+
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS(
+      ROLLUPADDISSUBTOTAL('financials'[Segment], "IsGrandTotalRowTotal"),
+      "SumGross_Sales", CALCULATE(SUM('financials'[Gross Sales])),
+      "SumDiscounts", CALCULATE(SUM('financials'[Discounts]))
+    )
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(502, __DS0Core, [IsGrandTotalRowTotal], 0, 'financials'[Segment], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [IsGrandTotalRowTotal] DESC, 'financials'[Segment]
+  
+  
+  
+  
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    VALUES('financials'[Segment])
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(101, __DS0Core, 'financials'[Segment], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  'financials'[Segment]
+
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS(
+      'financials'[Product],
+      "SumProfit", CALCULATE(SUM('financials'[Profit])),
+      "SumSale_Price", CALCULATE(SUM('financials'[Sale Price]))
+    )
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumProfit], 0, 'financials'[Product], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumProfit] DESC, 'financials'[Product]
+
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    VALUES('financials'[Segment])
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(101, __DS0Core, 'financials'[Segment], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  'financials'[Segment]
+
+
+// DAX Query
+DEFINE
+  VAR __DS0FilterTable = 
+    TREATAS({"Government"}, 'financials'[Segment])
+
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS(
+      'financials'[Product],
+      __DS0FilterTable,
+      "SumProfit", CALCULATE(SUM('financials'[Profit])),
+      "SumSale_Price", CALCULATE(SUM('financials'[Sale Price]))
+    )
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumProfit], 0, 'financials'[Product], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumProfit] DESC, 'financials'[Product]
+
+
+// DAX Query
+DEFINE
+  VAR __DS0FilterTable = 
+    TREATAS({"Midmarket"}, 'financials'[Segment])
+
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS(
+      'financials'[Product],
+      __DS0FilterTable,
+      "SumProfit", CALCULATE(SUM('financials'[Profit])),
+      "SumSale_Price", CALCULATE(SUM('financials'[Sale Price]))
+    )
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumProfit], 0, 'financials'[Product], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumProfit] DESC, 'financials'[Product]
+
+
+// DAX Query
+DEFINE
+  VAR __DS0FilterTable = 
+    TREATAS({"Small Business"}, 'financials'[Segment])
+
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS(
+      'financials'[Product],
+      __DS0FilterTable,
+      "SumProfit", CALCULATE(SUM('financials'[Profit])),
+      "SumSale_Price", CALCULATE(SUM('financials'[Sale Price]))
+    )
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumProfit], 0, 'financials'[Product], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumProfit] DESC, 'financials'[Product]
+
+
+
+// DAX Query
+DEFINE
+  VAR __DS0FilterTable = 
+    TREATAS({"Channel Partners"}, 'financials'[Segment])
+
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS(
+      'financials'[Product],
+      __DS0FilterTable,
+      "SumProfit", CALCULATE(SUM('financials'[Profit])),
+      "SumSale_Price", CALCULATE(SUM('financials'[Sale Price]))
+    )
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumProfit], 0, 'financials'[Product], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumProfit] DESC, 'financials'[Product]
+
+
+// DAX Query
+DEFINE VAR __DS0FilterTable = 
+  TREATAS({"Channel Partners"}, 'financials'[Segment])
+
+EVALUATE
+  SUMMARIZECOLUMNS(
+    __DS0FilterTable,
+    "SumGross_Sales", IGNORE(CALCULATE(SUM('financials'[Gross Sales])))
+  )
+
+
+
+// DAX Query
+DEFINE
+  VAR __DS0FilterTable = 
+    TREATAS({"Channel Partners"}, 'financials'[Segment])
+
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS(
+      ROLLUPADDISSUBTOTAL('financials'[Segment], "IsGrandTotalRowTotal"),
+      __DS0FilterTable,
+      "SumGross_Sales", CALCULATE(SUM('financials'[Gross Sales]))
+    )
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(502, __DS0Core, [IsGrandTotalRowTotal], 0, 'financials'[Segment], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [IsGrandTotalRowTotal] DESC, 'financials'[Segment]
+
+
+
+// DAX Query
+DEFINE
+  VAR __DS0FilterTable = 
+    TREATAS({"Channel Partners"}, 'financials'[Segment])
+
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS(
+      ROLLUPADDISSUBTOTAL(
+        ROLLUPGROUP('financials'[Segment], 'financials'[Product]), "IsGrandTotalRowTotal"
+      ),
+      __DS0FilterTable,
+      "SumGross_Sales", CALCULATE(SUM('financials'[Gross Sales]))
+    )
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(502, __DS0Core, [IsGrandTotalRowTotal], 0, 'financials'[Segment], 1, 'financials'[Product], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [IsGrandTotalRowTotal] DESC, 'financials'[Segment], 'financials'[Product]
+
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    DISTINCT('Orders'[grpNWCountry])
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, 'Orders'[grpNWCountry], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  'Orders'[grpNWCountry]
+
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS('Orders'[grpNWCountry], "SumProfit", CALCULATE(SUM('Orders'[Profit])))
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumProfit], 0, 'Orders'[grpNWCountry], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumProfit] DESC, 'Orders'[grpNWCountry]
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS('Orders'[grpNWCountry], "SumProfit", CALCULATE(SUM('Orders'[Profit])))
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumProfit], 0, 'Orders'[grpNWCountry], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumProfit] DESC, 'Orders'[grpNWCountry]
+
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS('Orders'[grpNWCountry], "SumSales", CALCULATE(SUM('Orders'[Sales])))
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumSales], 0, 'Orders'[grpNWCountry], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumSales] DESC, 'Orders'[grpNWCountry]
+
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS('Orders'[grpNWCountry], "SumSales", CALCULATE(SUM('Orders'[Sales])))
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumSales], 0, 'Orders'[grpNWCountry], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumSales] DESC, 'Orders'[grpNWCountry]
+
+
+// DAX Query
+EVALUATE
+  ROW(
+    "SumSales", CALCULATE(SUM('Orders'[Sales]))
+  )
+
+
+// DAX Query
+DEFINE
+  VAR __DS0Core = 
+    SUMMARIZECOLUMNS('Orders'[GrpOthers], "SumSales", CALCULATE(SUM('Orders'[Sales])))
+
+  VAR __DS0PrimaryWindowed = 
+    TOPN(1001, __DS0Core, [SumSales], 0, 'Orders'[GrpOthers], 1)
+
+EVALUATE
+  __DS0PrimaryWindowed
+
+ORDER BY
+  [SumSales] DESC, 'Orders'[GrpOthers]

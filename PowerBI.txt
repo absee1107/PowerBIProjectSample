@@ -1,0 +1,29 @@
+Power BI - Notes
+
+Youtube Channels
+
+Pragmatic Works -https://www.youtube.com/c/PragmaticWorks
+Curbal - https://www.youtube.com/watch?v=mcQ_ZmuWvDs&list=PLDz00l_jz6zym_YP8ZW11o52niGfCP8pN&index=63
+
+https://curbal.com/donwload-center
+https://curbal.com/create-power-bi-custom-calendars
+
+https://powerbidevcamp.powerappsportals.com/sessions/session16/
+
+https://docs.microsoft.com/en-us/powerquery-m/m-spec-functions
+https://lucidinsights.com.au/industry-trends-and-news/how-to-implement-table-variables-in-power-bi-with-dax-function/
+https://forum.enterprisedna.co/t/time-intelligence-series-by-brianj-and-melissa/7745
+https://forum.enterprisedna.co/t/extended-date-table-power-query-m-function/6390
+https://forum.enterprisedna.co/t/extended-date-table-power-query-m-function/6390
+
+https://www.youtube.com/watch?v=eIaKC6zLmb0&list=PLrRPvpgDmw0lg9omfqfNczwsOryi6mwfp&index=3
+https://www.youtube.com/user/ExcelIsFun
+
+https://docs.microsoft.com/en-us/power-bi/
+https://docs.microsoft.com/en-us/power-bi/transform-model/desktop-quickstart-learn-dax-basics
+
+https://docs.microsoft.com/en-us/dax/currentgroup-function-dax
+
+
+===============Row Level Security
+https://docs.microsoft.com/en-us/power-bi/enterprise/service-admin-rls
